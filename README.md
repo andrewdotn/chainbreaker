@@ -19,7 +19,36 @@ If you have only keychain file, command as follow:
 
     # python chainbreaker.py -i [keychain file] -p [user password]
 
+### requirement : keychain file and SystemKey
 
+You can decrypt `System.keychain` using the key stored in
+`/private/var/db/SystemKey`. If the contents of `/private/var/db/SystemKey`
+are as follows:
+
+    00000000  fa de 07 11 00 00 00 00  04 a6 73 b6 51 95 91 f2  |......0...s.Q...|
+    00000010  da 6f 0d f4 9a b9 fb 41  d9 fd ae 15 94 ec ae e3  |.o.....A........|
+    00000020  be 35 9a 54 78 b6 dc ec  19 c6 47 ff 1b 8f 47 68  |.5.Tx.....G...Gh|
+    00000030
+
+Grab the 24 bytes after `fade0711 00000000` in hex and pass them as `-k`:
+
+    $ python chainbreaker.py -i /Library/Keychains/System.keychain \
+        -k 04a673b6519591f2da6f0df49ab9fb41d9fdae1594ecaee3
+    [+] KeyChain Header
+     [-] Signature : kych
+     [-] Version : 0x00010000
+    ...
+     [-] Description : AirPort network password
+     [-] Creator :
+     [-] Type :
+     [-] PrintName : FAMILYNETWORK
+     [-] Alias :
+     [-] Account : FAMILYNETWORK
+     [-] Service : AirPort
+     [-] Password
+    00000000:  63 6f 6d 70 75 74 65 72 73 2d 61 72 65 2d 65 64 75 63 61 74 69 6f 6e 61 6c
+        computers-are-educational
+    ...
 
 ### requirement : keychain file and memory image
 
